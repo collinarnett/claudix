@@ -71,8 +71,6 @@ Entering the devShell writes `.claude/settings.json` with only the keys you set:
 | `claude.settingsFile` | package (read-only) | Derivation producing `settings.json` |
 | `claude.shellHook` | string (read-only) | Shell snippet that writes `.claude/settings.json` |
 
-`claude.settings` has a `freeformType` escape hatch — you can pass arbitrary extra keys for settings not yet in the schema without breaking the module.
-
 ## Regenerating options
 
 When Claude Code's schema changes upstream, regenerate `generated/options.nix`:

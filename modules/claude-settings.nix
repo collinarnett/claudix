@@ -38,7 +38,6 @@ in
         options.claude = {
           settings = mkOption {
             type = types.submodule {
-              freeformType = types.attrsOf types.anything;
               options = generatedOptions;
             };
             default = { };
