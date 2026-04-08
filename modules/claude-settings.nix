@@ -50,6 +50,15 @@ in
             description = "Derivation producing the claude settings.json file.";
           };
 
+          addGcRoot = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether to add `.claude/settings.json` as an indirect garbage collector root.
+              When false, the shell hook creates a symlink to the generated file instead.
+            '';
+          };
+
           shellHook = mkOption {
             type = types.str;
             readOnly = true;
@@ -66,7 +75,12 @@ in
           shellHook = ''
             mkdir -p .claude
             if ! diff -q <(cat .claude/settings.json 2>/dev/null) ${cfg.settingsFile} &>/dev/null; then
-              cp ${cfg.settingsFile} .claude/settings.json
+              ${
+                if cfg.addGcRoot then
+                  "nix-store --add-root .claude/settings.json --indirect --realise ${cfg.settingsFile}"
+                else
+                  "ln -sf ${cfg.settingsFile} .claude/settings.json"
+              }
               echo "claudix: updated .claude/settings.json"
             fi
           '';
